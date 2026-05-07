@@ -33,6 +33,7 @@ local u16 = {
 }
 do
     local v16_loaded = false
+    local v16_sound_url = "https://raw.githubusercontent.com/martinmangos/sunshine-xd/refs/heads/main/GunSoundPlay.lua"
     local v16_read_ok, v16_source = pcall(readfile, "GunSoundPlay.lua")
     if v16_read_ok and type(v16_source) == "string" and #v16_source > 0 then
         local v16_chunk_ok, v16_chunk = pcall(loadstring, v16_source)
@@ -41,6 +42,21 @@ do
             if v16_mod_ok and type(v16_module) == "table" and type(v16_module.SoundPlay) == "function" then
                 u16 = v16_module
                 v16_loaded = true
+            end
+        end
+    end
+    if not v16_loaded and game and game.HttpGet then
+        local v16_http_ok, v16_http_source = pcall(function()
+            return game:HttpGet(v16_sound_url)
+        end)
+        if v16_http_ok and type(v16_http_source) == "string" and #v16_http_source > 0 then
+            local v16_chunk_ok, v16_chunk = pcall(loadstring, v16_http_source)
+            if v16_chunk_ok and type(v16_chunk) == "function" then
+                local v16_mod_ok, v16_module = pcall(v16_chunk)
+                if v16_mod_ok and type(v16_module) == "table" and type(v16_module.SoundPlay) == "function" then
+                    u16 = v16_module
+                    v16_loaded = true
+                end
             end
         end
     end
